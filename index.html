@@ -9,7 +9,7 @@
   </head>
   <body>
     <button id="new-book-btn">New Book</button>
-    <form id="book-form" action="" method="post" onsubmit="event.preventDefault()">
+    <form id="book-form" action="" method="post">
       <div>
         <label for="author">Author</label>
         <input type="text" id="author" name="author" />
@@ -21,8 +21,10 @@
         <input type="checkbox" id="read" name="read" />
       </div>
       <div>
-        <button type="submit">Submit</button>
+        <button type="submit" id="new-book-btn">Submit</button>
       </div>
     </form>
+    <h1>Your Books</h1>
+    <div class="books"></div>
   </body>
 </html>

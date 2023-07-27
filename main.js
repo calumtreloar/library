@@ -1,4 +1,17 @@
-let myLibrary = [];
+let myLibrary = [
+  {
+    title: "A song of fire and ice",
+    author: "George R. R. Martin",
+    pages: 650,
+    read: true,
+  },
+  {
+    title: "A dance with dragons",
+    author: "George R. R. Martin",
+    pages: 850,
+    read: false,
+  },
+];
 
 function Book(title, author, pages, read) {
   this.title = title;
@@ -10,18 +23,22 @@ function Book(title, author, pages, read) {
   };
 }
 
-function addBookToLibrary() {}
+const form = document.querySelector("#book-form");
+form.addEventListener("submit", (e) => {
+  e.preventDefault();
+  addBookToLibrary(
+    document.querySelector("#title").value,
+    document.querySelector("#author").value,
+    document.querySelector("#pages").value,
+    document.querySelector("#read").checked
+  );
 
-const newBookBtn = document.querySelector("#new-book-btn");
-
-newBookBtn.addEventListener("click", () => {
-  const form = document.getElementById("book-form");
-
-  if (form.style.display === "none") {
-    form.style.display = "block";
-  } else {
-    form.style.display = "none";
-  }
+  console.table(myLibrary);
 });
 
-console.log(theHobbit.info());
+// Adds a book to the library
+function addBookToLibrary(title, author, pages, read) {
+  myLibrary.push(new Book(title, author, pages, read));
+}
+
+function displayBooks() {}

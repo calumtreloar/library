@@ -9,6 +9,6 @@
   font-weight: 700;
 }
 
-#book-form {
-  display: none;
+.books {
+  border: 1px solid black;
 }
