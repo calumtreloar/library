@@ -25,7 +25,6 @@ form.addEventListener("submit", (e) => {
     document.querySelector("#read").checked
   );
   closeModal();
-  refreshReadStatus();
 });
 
 // Adds a book to the library
@@ -47,8 +46,19 @@ function addBooksToTable(books) {
     const title = document.createElement("td");
     const author = document.createElement("td");
     const pages = document.createElement("td");
+
     const read = document.createElement("td");
     read.classList.add("read-status");
+    read.addEventListener("click", (e) => {
+      const bookIdx = e.target.parentElement.getAttribute("data-index");
+      myLibrary.forEach((book) => {
+        if (book.id == bookIdx) {
+          book.read = book.read ? false : true;
+          e.target.innerHTML = calculateRead(book.read);
+        }
+      });
+    });
+
     const deleteBook = document.createElement("button");
 
     title.textContent = book.title;
@@ -73,30 +83,12 @@ function addBooksToTable(books) {
         }
       });
       e.target.parentElement.remove();
-      refreshReadStatus();
     });
   });
 }
 
 function calculateRead(read) {
-  return read ? "✔️" : "✖";
-}
-
-function refreshReadStatus() {
-  document.querySelectorAll(".read-status").forEach((el) => {
-    el.addEventListener("click", (e) => {
-      const bookIdx = e.target.parentElement.getAttribute("data-index");
-      myLibrary.forEach((book) => {
-        if (book.id == bookIdx) {
-          console.log(book.id, bookIdx);
-          book.read = book.read ? false : true;
-          e.target.textContent = calculateRead(book.read);
-        }
-      });
-
-      console.table(myLibrary);
-    });
-  });
+  return read ? "Read" : "Unread";
 }
 
 // Modal overlay
