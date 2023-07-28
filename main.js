@@ -1,19 +1,9 @@
-let myLibrary = [
-  {
-    title: "A song of fire and ice",
-    author: "George R. R. Martin",
-    pages: 650,
-    read: true,
-  },
-  {
-    title: "A dance with dragons",
-    author: "George R. R. Martin",
-    pages: 850,
-    read: false,
-  },
-];
+let bookIncrement = 0;
 
-function Book(title, author, pages, read) {
+let myLibrary = [];
+
+function Book(id, title, author, pages, read) {
+  this.id = id;
   this.title = title;
   this.author = author;
   this.pages = pages;
@@ -28,37 +18,43 @@ const form = document.querySelector("#book-form");
 form.addEventListener("submit", (e) => {
   e.preventDefault();
   addBookToLibrary(
+    bookIncrement,
     document.querySelector("#title").value,
     document.querySelector("#author").value,
     document.querySelector("#pages").value,
     document.querySelector("#read").checked
   );
   closeModal();
-
-  console.table(myLibrary);
+  refreshReadStatus();
 });
 
 // Adds a book to the library
-function addBookToLibrary(title, author, pages, read) {
-  const book = new Book(title, author, pages, read);
+function addBookToLibrary(id, title, author, pages, read) {
+  const book = new Book(id, title, author, pages, read);
   myLibrary.push(book);
   addBooksToTable([book]);
 }
 
+// Renders books into table row
 function addBooksToTable(books) {
   const bookTable = document.querySelector("#book-table-body");
   books.forEach((book) => {
     const tableRow = document.createElement("tr");
+    tableRow.classList.add("book-row");
+    tableRow.setAttribute("data-index", bookIncrement);
+    bookIncrement++;
+
     const title = document.createElement("td");
     const author = document.createElement("td");
     const pages = document.createElement("td");
     const read = document.createElement("td");
-    const deleteBook = document.createElement("td");
+    read.classList.add("read-status");
+    const deleteBook = document.createElement("button");
 
     title.textContent = book.title;
     author.textContent = book.author;
     pages.textContent = book.pages;
-    read.textContent = book.read;
+    read.innerHTML = calculateRead(book.read);
     deleteBook.innerHTML = "✖";
     deleteBook.className = "delete-button";
 
@@ -68,11 +64,42 @@ function addBooksToTable(books) {
     tableRow.appendChild(read);
     tableRow.appendChild(deleteBook);
     bookTable.appendChild(tableRow);
+
+    deleteBook.addEventListener("click", (e) => {
+      const bookIdx = e.target.parentElement.getAttribute("data-index");
+      myLibrary.forEach((book, index) => {
+        if (book.id == bookIdx) {
+          myLibrary.splice(index, 1);
+        }
+      });
+      e.target.parentElement.remove();
+      refreshReadStatus();
+    });
   });
 }
 
-function deleteBook() {}
+function calculateRead(read) {
+  return read ? "✔️" : "✖";
+}
 
+function refreshReadStatus() {
+  document.querySelectorAll(".read-status").forEach((el) => {
+    el.addEventListener("click", (e) => {
+      const bookIdx = e.target.parentElement.getAttribute("data-index");
+      myLibrary.forEach((book) => {
+        if (book.id == bookIdx) {
+          console.log(book.id, bookIdx);
+          book.read = book.read ? false : true;
+          e.target.textContent = calculateRead(book.read);
+        }
+      });
+
+      console.table(myLibrary);
+    });
+  });
+}
+
+// Modal overlay
 const modal = document.querySelector("#new-book-modal");
 const overlay = document.querySelector(".overlay");
 const openModalBtn = document.querySelector(".btn-open");
