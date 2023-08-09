@@ -2,16 +2,23 @@ let bookIncrement = 0;
 
 let myLibrary = [];
 
-function Book(id, title, author, pages, read) {
-  this.id = id;
-  this.title = title;
-  this.author = author;
-  this.pages = pages;
-  this.read = read;
-  this.info = function () {
-    return `${title} by ${author}, ${pages}, ${read}`;
-  };
+class Book {
+  constructor(id, title, author, pages, read) {
+    this.id = id;
+    this.title = title;
+    this.author = author;
+    this.pages = pages;
+    this.read = read;
+  }
 }
+
+// function Book(id, title, author, pages, read) {
+//   this.id = id;
+//   this.title = title;
+//   this.author = author;
+//   this.pages = pages;
+//   this.read = read;
+// }
 
 addBooksToTable(myLibrary);
 const form = document.querySelector("#book-form");
